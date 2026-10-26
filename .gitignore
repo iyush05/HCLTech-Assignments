@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.vs/
+.DS_Store
+.dotnet/
+.dotnet-cli/
+.nuget/
+**/App_Data/
+*.db
+*.db-shm
+*.db-wal

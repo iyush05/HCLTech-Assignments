@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Real-time global weather forecasts powered by ASP.NET Core HttpClient, REST APIs, and EF Core.">
+  <title>Weather App · Form & Function</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23142b36'/%3E%3Ctext x='10' y='29' fill='%23c4efd9' font-size='28'%3Ef%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <span class="brand-mark">ƒ.</span>
+        <div>form &amp; function<small>THE EVERYDAY TOOLKIT</small></div>
+      </div>
+      <div class="nav-label">YOUR TOOLKIT</div>
+      <nav aria-label="Projects">
+        <a href="http://localhost:5101"><span aria-hidden="true">◈</span>Number game</a>
+        <a href="http://localhost:5102"><span aria-hidden="true">▦</span>Calculator</a>
+        <a href="http://localhost:5103"><span aria-hidden="true">⇄</span>Converter</a>
+        <a href="http://localhost:5104"><span aria-hidden="true">✓</span>To-do list</a>
+        <a href="http://localhost:5105"><span aria-hidden="true">▤</span>Grade manager</a>
+        <a href="http://localhost:5106"><span aria-hidden="true">?</span>Quiz app</a>
+        <a href="http://localhost:5107"><span aria-hidden="true">◇</span>Bank simulator</a>
+        <a href="http://localhost:5108"><span aria-hidden="true">⌘</span>Password generator</a>
+        <a href="http://localhost:5109"><span aria-hidden="true">✎</span>Personal notes</a>
+        <a href="/" class="active" aria-current="page"><span aria-hidden="true">☼</span>Weather app</a>
+        <a href="http://localhost:5111"><span aria-hidden="true">📇</span>Contact book</a>
+      </nav>
+      <div class="aside-bottom">
+        <strong>Small tools. Thoughtfully made.</strong>
+        A little less friction.<br>A little more possibility.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <span>Toolkit / <strong>Weather app</strong></span>
+        <span class="pill"><span class="dot"></span>Web &amp; APIs · HTTP &amp; EF Core</span>
+      </header>
+
+      <section class="intro">
+        <div class="eyebrow">PROJECT 10 / WEATHER APP</div>
+        <h1>Current conditions &amp; forecasts.</h1>
+        <p>Real-time meteorology powered by ASP.NET Core typed HttpClient, external REST APIs, and Entity Framework Core SQLite persistence.</p>
+      </section>
+
+      <noscript><p>Enable JavaScript to use this application.</p></noscript>
+      <div id="status" class="status status-bar" role="status" aria-live="polite">Loading weather forecast…</div>
+
+      <div class="workspace">
+        <div class="weather-main-stack">
+          <!-- Search & Quick Selection -->
+          <section class="card">
+            <div class="card-body" style="padding-bottom: 20px;">
+              <form id="search-form" class="weather-search-bar">
+                <div class="search-input-wrapper">
+                  <input id="city-search" placeholder="Search any city or region in the world (e.g. Paris, Tokyo, Zurich)…" autocomplete="off" maxlength="100">
+                  <div id="search-dropdown" class="search-dropdown" hidden></div>
+                </div>
+                <button type="submit" class="secondary">Search</button>
+              </form>
+
+              <div class="quick-cities">
+                <span class="quick-label">Popular:</span>
+                <button type="button" class="city-chip" data-city="Tokyo" data-country="Japan" data-lat="35.6762" data-lon="139.6503">Tokyo</button>
+                <button type="button" class="city-chip" data-city="London" data-country="United Kingdom" data-lat="51.5074" data-lon="-0.1278">London</button>
+                <button type="button" class="city-chip" data-city="New York" data-country="United States" data-lat="40.7128" data-lon="-74.0060">New York</button>
+                <button type="button" class="city-chip" data-city="Paris" data-country="France" data-lat="48.8566" data-lon="2.3522">Paris</button>
+                <button type="button" class="city-chip" data-city="Sydney" data-country="Australia" data-lat="-33.8688" data-lon="151.2093">Sydney</button>
+                <button type="button" class="city-chip" data-city="Mumbai" data-country="India" data-lat="19.0760" data-lon="72.8777">Mumbai</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Current Weather Hero Card -->
+          <section class="card weather-hero-card">
+            <div class="card-header">
+              <div class="hero-location-info">
+                <h2 id="report-city">—</h2>
+                <span id="report-country" class="small">—</span>
+              </div>
+              <div class="hero-actions">
+                <button type="button" class="unit-toggle" id="unit-toggle" title="Switch between Celsius and Fahrenheit">
+                  <span id="unit-c" class="active">°C</span> / <span id="unit-f">°F</span>
+                </button>
+                <button type="button" class="secondary" id="save-favorite-btn">★ Save to favorites</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="hero-weather-body">
+                <div class="hero-temp-group">
+                  <div class="weather-icon-large" id="current-icon" aria-hidden="true">☀️</div>
+                  <div>
+                    <div class="current-temperature">
+                      <span id="current-temp">—</span><span class="degree-symbol" id="current-unit">°C</span>
+                    </div>
+                    <div class="weather-condition" id="current-condition">—</div>
+                    <div class="feels-like">Feels like <strong id="feels-like-temp">—</strong></div>
+                  </div>
+                </div>
+
+                <div class="weather-metrics-grid">
+                  <div class="metric-item">
+                    <span class="metric-icon">💧</span>
+                    <div>
+                      <strong id="metric-humidity">—</strong>
+                      <span>Humidity</span>
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <span class="metric-icon">💨</span>
+                    <div>
+                      <strong id="metric-wind">—</strong>
+                      <span id="wind-unit-label">Wind speed</span>
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <span class="metric-icon">🌧️</span>
+                    <div>
+                      <strong id="metric-precip">—</strong>
+                      <span>Precipitation</span>
+                    </div>
+                  </div>
+                  <div class="metric-item">
+                    <span class="metric-icon">🌐</span>
+                    <div>
+                      <strong id="data-source-badge">Live API</strong>
+                      <span>Data feed</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hourly Forecast Strip -->
+              <div class="forecast-section-title">Hourly outlook (next 24 hours)</div>
+              <div class="hourly-strip" id="hourly-strip"></div>
+
+              <!-- 7-Day Forecast -->
+              <div class="forecast-section-title" style="margin-top: 28px;">7-day extended forecast</div>
+              <div class="daily-forecast-list" id="daily-forecast"></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="side-stack">
+          <!-- Saved Favorite Locations (EF Core) -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Saved locations</h2>
+              <span class="small" id="fav-count">0 cities</span>
+            </div>
+            <div class="card-body">
+              <p class="panel-subtitle">Persisted via EF Core in <code>App_Data/weather.db</code>.</p>
+              <ul id="favorites-list" class="favorites-list"></ul>
+              <div id="no-favorites" class="content-empty" style="padding: 20px 0;" hidden>
+                <strong>No saved cities yet.</strong>
+                Click "★ Save to favorites" on any forecast.
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent Searches -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Recent searches</h2>
+            </div>
+            <div class="card-body">
+              <div class="recent-searches-list" id="recent-searches"></div>
+            </div>
+          </section>
+
+          <!-- Under the hood -->
+          <section class="note">
+            <h3>Under the hood</h3>
+            <p>Demonstrates ASP.NET Core typed <code>HttpClient</code> calling live Open-Meteo REST endpoints, streaming JSON deserialization, automatic unit transformations, and Entity Framework Core SQLite database storage for favorites and query history.</p>
+          </section>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span>FORM &amp; FUNCTION / A collection of everyday essentials</span>
+        <span>Built for global curiosity.</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[
+  { "Id": 1, "Prompt": "What is a class in C#?", "Options": ["A blueprint for creating objects", "A loop that repeats code", "A file extension", "A database row"], "Answer": 0, "Explanation": "A class defines the data and behavior shared by its objects." },
+  { "Id": 2, "Prompt": "Which collection can grow as you add items?", "Options": ["A fixed-size array", "List<T>", "An int", "A bool"], "Answer": 1, "Explanation": "List<T> is a strongly typed collection whose size grows as elements are added." },
+  { "Id": 3, "Prompt": "Which LINQ method filters a collection?", "Options": ["Select", "OrderBy", "Where", "Sum"], "Answer": 2, "Explanation": "Where keeps elements that satisfy a predicate. Select transforms elements." },
+  { "Id": 4, "Prompt": "Why keep a bank account’s balance changes inside methods?", "Options": ["To avoid using numbers", "To remove all validation", "To make the code longer", "To enforce the account’s rules"], "Answer": 3, "Explanation": "Encapsulation gives the account a single place to enforce rules such as preventing overdrafts." },
+  { "Id": 5, "Prompt": "Which method writes text to a file?", "Options": ["File.WriteAllText", "Console.ReadLine", "Math.Round", "Enumerable.Range"], "Answer": 0, "Explanation": "File.WriteAllText writes a string to a file, creating it or replacing its contents." },
+  { "Id": 6, "Prompt": "What does students.Average(s => s.Score) return?", "Options": ["The highest score", "The first student", "The arithmetic mean of the scores", "A sorted list"], "Answer": 2, "Explanation": "Average adds the selected numeric values and divides by the number of elements." }
+]

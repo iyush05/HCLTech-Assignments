@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A modern Contact Book and interactive HTTP API console powered by ASP.NET Core and Entity Framework Core.">
+  <title>Contact Book API · Form & Function</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23142b36'/%3E%3Ctext x='10' y='29' fill='%23c4efd9' font-size='28'%3Ef%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <span class="brand-mark">ƒ.</span>
+        <div>form &amp; function<small>THE EVERYDAY TOOLKIT</small></div>
+      </div>
+      <div class="nav-label">YOUR TOOLKIT</div>
+      <nav aria-label="Projects">
+        <a href="http://localhost:5101"><span aria-hidden="true">◈</span>Number game</a>
+        <a href="http://localhost:5102"><span aria-hidden="true">▦</span>Calculator</a>
+        <a href="http://localhost:5103"><span aria-hidden="true">⇄</span>Converter</a>
+        <a href="http://localhost:5104"><span aria-hidden="true">✓</span>To-do list</a>
+        <a href="http://localhost:5105"><span aria-hidden="true">▤</span>Grade manager</a>
+        <a href="http://localhost:5106"><span aria-hidden="true">?</span>Quiz app</a>
+        <a href="http://localhost:5107"><span aria-hidden="true">◇</span>Bank simulator</a>
+        <a href="http://localhost:5108"><span aria-hidden="true">⌘</span>Password generator</a>
+        <a href="http://localhost:5109"><span aria-hidden="true">✎</span>Personal notes</a>
+        <a href="http://localhost:5110"><span aria-hidden="true">☼</span>Weather app</a>
+        <a href="/" class="active" aria-current="page"><span aria-hidden="true">📇</span>Contact book</a>
+      </nav>
+      <div class="aside-bottom">
+        <strong>Small tools. Thoughtfully made.</strong>
+        A little less friction.<br>A little more possibility.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <span>Toolkit / <strong>Contact book API</strong></span>
+        <span class="pill"><span class="dot"></span>Web &amp; APIs · REST &amp; EF Core</span>
+      </header>
+
+      <section class="intro">
+        <div class="eyebrow">PROJECT 11 / CONTACT BOOK API</div>
+        <h1>Directory, connections &amp; REST.</h1>
+        <p>A full-featured Contact Directory and live interactive HTTP API console built with ASP.NET Core Minimal APIs and Entity Framework Core with SQLite.</p>
+      </section>
+
+      <!-- View Switcher Tabs -->
+      <div class="view-tabs" role="tablist">
+        <button type="button" class="view-tab active" id="tab-directory" role="tab" aria-selected="true">📇 Contact directory</button>
+        <button type="button" class="view-tab" id="tab-api-explorer" role="tab" aria-selected="false">⚡ Interactive API explorer</button>
+      </div>
+
+      <noscript><p>Enable JavaScript to use this application.</p></noscript>
+      <div id="status" class="status status-bar" role="status" aria-live="polite">Connecting to contacts database…</div>
+
+      <!-- VIEW 1: CONTACT DIRECTORY -->
+      <div id="view-directory-container" class="workspace">
+        <section class="card">
+          <div class="card-header">
+            <h2>Your directory</h2>
+            <div class="button-line">
+              <button class="secondary" id="export-json-btn" title="Download contacts JSON">Export JSON</button>
+              <button class="secondary" id="refresh-contacts-btn" title="Reload from server">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Stats -->
+            <div class="stats four" id="contact-stats">
+              <div class="stat"><strong id="stat-total">—</strong><span>Total</span></div>
+              <div class="stat"><strong id="stat-favs">—</strong><span>Favorites</span></div>
+              <div class="stat"><strong id="stat-work">—</strong><span>Work</span></div>
+              <div class="stat"><strong id="stat-personal">—</strong><span>Personal</span></div>
+            </div>
+
+            <!-- Filter Toolbar -->
+            <div class="toolbar">
+              <input id="search-input" placeholder="Search by name, email, company, phone…" maxlength="100">
+              <div class="filters" role="group" aria-label="Category filters">
+                <button type="button" data-cat="all" class="selected">All</button>
+                <button type="button" data-cat="Work">Work</button>
+                <button type="button" data-cat="Personal">Personal</button>
+                <button type="button" data-cat="Family">Family</button>
+                <button type="button" data-cat="Other">Other</button>
+                <button type="button" id="toggle-favorites-filter" class="filter-star">★ Favorites</button>
+              </div>
+            </div>
+
+            <!-- Contacts Data List -->
+            <ul id="contacts-list" class="contacts-list"></ul>
+            <div class="content-empty" id="empty-contacts" hidden>
+              <strong>No contacts found.</strong>
+              Add a contact or adjust your search filter.
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-bar" id="pagination-bar">
+              <span id="pagination-info" class="pagination-info">Page 1 of 1</span>
+              <div class="pagination-buttons">
+                <button type="button" class="secondary" id="prev-page-btn" disabled>‹ Previous</button>
+                <button type="button" class="secondary" id="next-page-btn" disabled>Next ›</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Side Stack: Add / Edit Form -->
+        <div class="side-stack">
+          <section class="card">
+            <div class="card-header">
+              <h2><span id="form-heading">New contact</span></h2>
+            </div>
+            <div class="card-body">
+              <p class="panel-subtitle">Persisted via EF Core in <code>App_Data/contacts.db</code>.</p>
+              <form id="contact-form">
+                <input type="hidden" id="contact-id">
+                <div class="form-grid two-cols">
+                  <div class="field">
+                    <label for="contact-firstname">First name *</label>
+                    <input id="contact-firstname" placeholder="e.g. Ada" maxlength="60" required>
+                  </div>
+                  <div class="field">
+                    <label for="contact-lastname">Last name *</label>
+                    <input id="contact-lastname" placeholder="e.g. Lovelace" maxlength="60" required>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="contact-email">Email address *</label>
+                  <input id="contact-email" type="email" placeholder="name@domain.com" maxlength="120" required>
+                </div>
+
+                <div class="field">
+                  <label for="contact-phone">Phone number *</label>
+                  <input id="contact-phone" type="tel" placeholder="+1 555 0199" maxlength="30" required>
+                </div>
+
+                <div class="form-grid two-cols">
+                  <div class="field">
+                    <label for="contact-company">Company</label>
+                    <input id="contact-company" placeholder="e.g. Acme Corp" maxlength="100">
+                  </div>
+                  <div class="field">
+                    <label for="contact-jobtitle">Job title</label>
+                    <input id="contact-jobtitle" placeholder="e.g. Engineer" maxlength="100">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="contact-category">Category</label>
+                  <select id="contact-category">
+                    <option value="Personal">Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="Family">Family</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <div class="option-row" style="margin: 0;">
+                    <input type="checkbox" id="contact-favorite">
+                    <label for="contact-favorite">Add to favorite contacts (★)</label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="contact-notes">Notes</label>
+                  <textarea id="contact-notes" rows="3" placeholder="Context, meeting records, or background…" maxlength="500"></textarea>
+                </div>
+
+                <button class="primary" id="save-contact-btn" type="submit">Save contact +</button>
+                <button type="button" class="secondary cancel" id="cancel-contact-btn" hidden>Cancel editing</button>
+              </form>
+            </div>
+          </section>
+
+          <!-- Under the hood card -->
+          <section class="note">
+            <h3>REST API Architecture</h3>
+            <p>Implements standard HTTP semantics: <code>GET</code>, <code>POST</code> (201 Created + Location header), <code>PUT</code> (200 OK), <code>DELETE</code> (204 No Content), and <code>PATCH</code>. All queries support server-side pagination and EF Core indexes.</p>
+          </section>
+        </div>
+      </div>
+
+      <!-- VIEW 2: INTERACTIVE API EXPLORER -->
+      <div id="view-api-container" class="workspace" hidden>
+        <section class="card api-console-card">
+          <div class="card-header">
+            <h2>REST Endpoint Console</h2>
+            <span class="small">Live ASP.NET Core HTTP Client</span>
+          </div>
+          <div class="card-body">
+            <div class="field">
+              <label for="api-preset-select">Choose a REST Endpoint Template</label>
+              <select id="api-preset-select">
+                <option value="get-all">GET /api/contacts (List contacts with pagination &amp; search)</option>
+                <option value="get-single">GET /api/contacts/{id} (Get contact by Guid)</option>
+                <option value="post-create">POST /api/contacts (Create contact with validation)</option>
+                <option value="put-update">PUT /api/contacts/{id} (Update contact)</option>
+                <option value="delete-single">DELETE /api/contacts/{id} (Delete contact)</option>
+                <option value="patch-fav">PATCH /api/contacts/{id}/favorite (Toggle favorite)</option>
+                <option value="get-stats">GET /api/contacts/stats (Telemetry &amp; category totals)</option>
+              </select>
+            </div>
+
+            <!-- HTTP Request Bar -->
+            <div class="api-request-bar">
+              <span class="http-badge get" id="http-method-badge">GET</span>
+              <input id="api-url-input" value="/api/contacts?page=1&pageSize=10" aria-label="API URL path">
+              <button type="button" class="primary" id="api-send-btn" style="width: auto; padding: 12px 24px;">Send Request 🚀</button>
+            </div>
+
+            <!-- Request Body (JSON) -->
+            <div class="field" id="api-body-field" hidden>
+              <div class="range-label">
+                <label for="api-body-input">Request Body (application/json)</label>
+                <span class="small">Edit payload before sending</span>
+              </div>
+              <textarea id="api-body-input" rows="8" spellcheck="false" class="code-textarea"></textarea>
+            </div>
+
+            <!-- Response Panel -->
+            <div class="api-response-panel">
+              <div class="api-response-header">
+                <div>
+                  <strong>HTTP Response:</strong>
+                  <span class="status-pill status-ready" id="response-status-badge">Ready</span>
+                </div>
+                <div class="small" id="response-time">—</div>
+              </div>
+              <pre class="api-response-body" id="response-body">Click "Send Request" to invoke the live ASP.NET Core Minimal API endpoint.</pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- API Reference Stack -->
+        <div class="side-stack">
+          <section class="card">
+            <div class="card-header">
+              <h2>HTTP Status Codes</h2>
+            </div>
+            <div class="card-body">
+              <ul class="http-docs-list">
+                <li><span class="badge status-200">200 OK</span> Standard response for successful GET, PUT, or PATCH.</li>
+                <li><span class="badge status-201">201 Created</span> Returned by POST with a <code>Location</code> header.</li>
+                <li><span class="badge status-204">204 No Content</span> Returned by DELETE when successfully removed.</li>
+                <li><span class="badge status-400">400 Bad Request</span> Returned when model validation fails.</li>
+                <li><span class="badge status-404">404 Not Found</span> Returned when the requested GUID does not exist.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span>FORM &amp; FUNCTION / A collection of everyday essentials</span>
+        <span>Built for reliable connectivity.</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

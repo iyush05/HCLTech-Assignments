@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A mindful workspace for your notes, ideas, and drafts. Powered by ASP.NET Core and Entity Framework Core.">
+  <title>Personal Notes · Form & Function</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23142b36'/%3E%3Ctext x='10' y='29' fill='%23c4efd9' font-size='28'%3Ef%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <span class="brand-mark">ƒ.</span>
+        <div>form &amp; function<small>THE EVERYDAY TOOLKIT</small></div>
+      </div>
+      <div class="nav-label">YOUR TOOLKIT</div>
+      <nav aria-label="Projects">
+        <a href="http://localhost:5101"><span aria-hidden="true">◈</span>Number game</a>
+        <a href="http://localhost:5102"><span aria-hidden="true">▦</span>Calculator</a>
+        <a href="http://localhost:5103"><span aria-hidden="true">⇄</span>Converter</a>
+        <a href="http://localhost:5104"><span aria-hidden="true">✓</span>To-do list</a>
+        <a href="http://localhost:5105"><span aria-hidden="true">▤</span>Grade manager</a>
+        <a href="http://localhost:5106"><span aria-hidden="true">?</span>Quiz app</a>
+        <a href="http://localhost:5107"><span aria-hidden="true">◇</span>Bank simulator</a>
+        <a href="http://localhost:5108"><span aria-hidden="true">⌘</span>Password generator</a>
+        <a href="/" class="active" aria-current="page"><span aria-hidden="true">✎</span>Personal notes</a>
+        <a href="http://localhost:5110"><span aria-hidden="true">☼</span>Weather app</a>
+        <a href="http://localhost:5111"><span aria-hidden="true">📇</span>Contact book</a>
+      </nav>
+      <div class="aside-bottom">
+        <strong>Small tools. Thoughtfully made.</strong>
+        A little less friction.<br>A little more possibility.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <span>Toolkit / <strong>Personal notes</strong></span>
+        <span class="pill"><span class="dot"></span>Web &amp; APIs · EF Core</span>
+      </header>
+
+      <section class="intro">
+        <div class="eyebrow">PROJECT 09 / PERSONAL NOTES</div>
+        <h1>Thoughts, captures &amp; insights.</h1>
+        <p>A mindful workspace for your notes, ideas, and drafts, powered by ASP.NET Core Minimal APIs and Entity Framework Core with SQLite.</p>
+      </section>
+
+      <noscript><p>Enable JavaScript to use this application.</p></noscript>
+      <div id="status" class="status status-bar" role="status" aria-live="polite">Connecting to notes database…</div>
+
+      <div class="workspace">
+        <section class="card">
+          <div class="card-header">
+            <h2>Your notebook</h2>
+            <button class="secondary" id="refresh-btn" title="Refresh notes from server">↻ Refresh</button>
+          </div>
+          <div class="card-body">
+            <div class="stats three">
+              <div class="stat"><strong id="stat-total">—</strong><span>Total notes</span></div>
+              <div class="stat"><strong id="stat-pinned">—</strong><span>Pinned</span></div>
+              <div class="stat"><strong id="stat-words">—</strong><span>Total words</span></div>
+            </div>
+
+            <div class="toolbar">
+              <input id="search-input" aria-label="Search notes" placeholder="Search notes by title or keywords…" maxlength="120">
+              <select id="category-filter" aria-label="Filter by category">
+                <option value="all">All categories</option>
+              </select>
+              <button type="button" class="secondary" id="toggle-pinned-only" aria-pressed="false">📌 Pinned only</button>
+            </div>
+
+            <div id="notes-grid" class="notes-grid"></div>
+            <div class="content-empty" id="empty-state" hidden>
+              <strong>Your notebook is clear.</strong>
+              Capture an idea or snippet using the composer on the right.
+            </div>
+          </div>
+        </section>
+
+        <div class="side-stack">
+          <section class="card">
+            <div class="card-header">
+              <h2><span id="form-heading">Capture a note</span></h2>
+            </div>
+            <div class="card-body">
+              <p class="panel-subtitle">Saved directly to local SQLite via Entity Framework Core.</p>
+              <form id="note-form">
+                <input type="hidden" id="note-id">
+                <div class="field">
+                  <label for="note-title">Title</label>
+                  <input id="note-title" placeholder="e.g. System Architecture Notes" maxlength="120" required>
+                </div>
+
+                <div class="field">
+                  <label for="note-category">Category</label>
+                  <input id="note-category" list="category-datalist" placeholder="e.g. Work, Ideas, Personal" maxlength="40">
+                  <datalist id="category-datalist">
+                    <option value="Work">
+                    <option value="Ideas">
+                    <option value="Personal">
+                    <option value="Study">
+                    <option value="Journal">
+                  </datalist>
+                </div>
+
+                <div class="field">
+                  <label>Color accent</label>
+                  <div class="color-picker" role="radiogroup" aria-label="Note accent color">
+                    <label class="color-chip mint"><input type="radio" name="note-color" value="mint" checked><span>Mint</span></label>
+                    <label class="color-chip sky"><input type="radio" name="note-color" value="sky"><span>Sky</span></label>
+                    <label class="color-chip amber"><input type="radio" name="note-color" value="amber"><span>Amber</span></label>
+                    <label class="color-chip rose"><input type="radio" name="note-color" value="rose"><span>Rose</span></label>
+                    <label class="color-chip lavender"><input type="radio" name="note-color" value="lavender"><span>Lavender</span></label>
+                    <label class="color-chip emerald"><input type="radio" name="note-color" value="emerald"><span>Emerald</span></label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="option-row" style="margin: 0;">
+                    <input type="checkbox" id="note-pinned">
+                    <label for="note-pinned">Pin this note to the top</label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="range-label">
+                    <label for="note-content">Content</label>
+                    <output id="content-count">0 / 5000</output>
+                  </div>
+                  <textarea id="note-content" rows="7" placeholder="Write your thoughts, checklist items, or snippets…" maxlength="5000" required></textarea>
+                </div>
+
+                <button class="primary" id="save-btn" type="submit">Save note +</button>
+                <button type="button" class="secondary cancel" id="cancel-btn" hidden>Cancel editing</button>
+              </form>
+            </div>
+          </section>
+
+          <section class="note">
+            <h3>Under the hood</h3>
+            <p>Built with ASP.NET Core Minimal APIs and Entity Framework Core 8. Data is saved in a local SQLite database file at <code>App_Data/notes.db</code> with atomic transactions and indexed queries.</p>
+          </section>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <span>FORM &amp; FUNCTION / A collection of everyday essentials</span>
+        <span>Built for mindful productivity.</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
