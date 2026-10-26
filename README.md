@@ -1,3 +1,19 @@
+Name - Ayush Kannaujiya (CSE - 1)<br>
+University Roll No. - 2300270100042
+# Demo / Screenshots
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 13 57" src="https://github.com/user-attachments/assets/9948a0ce-45b8-4afb-afb7-525ce9490951" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 14 16" src="https://github.com/user-attachments/assets/a4efd520-5300-49f5-9ae9-2f12317e64d1" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 14 41" src="https://github.com/user-attachments/assets/7aeb55e6-5b95-4798-a2a5-0e012c6a7385" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 15 10" src="https://github.com/user-attachments/assets/dea235c1-962a-4643-ab3f-f90fde87bb07" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 15 23" src="https://github.com/user-attachments/assets/f3b59db4-abaa-4da5-92bd-8732786f567a" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 15 36" src="https://github.com/user-attachments/assets/6117080f-965f-4d96-85b3-3b2b1d5ec69d" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 15 59" src="https://github.com/user-attachments/assets/a521453e-e54c-41d3-910e-ace878c13758" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 16 14" src="https://github.com/user-attachments/assets/5114a509-a92d-4488-9899-b16c3cd33357" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 16 29" src="https://github.com/user-attachments/assets/d6e74a84-3900-4c64-ad17-adbba790bb43" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 16 52" src="https://github.com/user-attachments/assets/583c24c4-c819-4868-8b9d-06607a107ed1" />
+<img width="1470" height="923" alt="Screenshot 2026-10-26 at 17 17 07" src="https://github.com/user-attachments/assets/ec619389-c262-43d4-9f2c-feeb6dc0a8b5" />
+
+
 # Form & Function — C# everyday toolkit
 
 Eleven independent ASP.NET Core 8 projects with matching responsive browser UIs.
@@ -45,28 +61,3 @@ Skip `source` with a system-wide SDK. On Windows, install the .NET 8 SDK and run
 `dotnet run --project <project-name>` in separate terminals instead of using the
 shell scripts.
 
-## What you will learn
-
-- **Projects 1–3 (Core Fundamentals):** syntax, loops, conditions, methods, and input validation.
-- **Projects 4–8 (Data & OOP):** model/service classes, collections, LINQ queries, dependency
-  injection, and JSON file persistence.
-- **Projects 9–11 (Web & APIs):** ASP.NET Core Minimal APIs, Entity Framework Core 8, SQLite databases,
-  typed `HttpClient` and external REST API consumption, resilience fallbacks, RFC status codes,
-  server pagination, and an interactive in-browser HTTP API explorer.
-
-Every app has a `Program.cs` host and a standalone `wwwroot/` containing
-`index.html`, `styles.css`, and `app.js`. Projects 4–11 add service/model classes and `SelfTests.cs`.
-Projects 9–11 use Entity Framework Core 8 with SQLite for relational persistence in `App_Data/`.
-
-## Build and verify
-
-```sh
-source ./dotnet-env.sh
-dotnet build PersonalNotes
-dotnet run --project PersonalNotes -- --self-test
-dotnet run --project WeatherApp -- --self-test
-dotnet run --project ContactBook -- --self-test
-```
-
-Each new project supports `--self-test` to check its C# business rules and EF Core persistence with
-in-memory SQLite connections, without opening server ports.
